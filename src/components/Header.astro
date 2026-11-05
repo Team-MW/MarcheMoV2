@@ -11,7 +11,7 @@
  *   - Row 3 (Categories) becomes sticky, categories align to the left and auxiliary links slide down to the same line on the right.
  * - Category buttons have solid deep colored backgrounds, white text, and correct padding (no text wrapping).
  */
-import { RAYONS_LIST } from "@/lib/site";
+import { RAYONS, RAYONS_LIST } from "@/lib/site";
 import { DEFAULT_STORE } from "@/lib/geo";
 
 const pathname = Astro.url.pathname;
@@ -24,25 +24,39 @@ const isActive = (href: string) =>
  * Store-aware text is patched at runtime by enhanceStoreFromCookie. */
 const currentStore = DEFAULT_STORE;
 
-// Deep, rich shades matching each rayon for button backgrounds (ensures text-white is fully legible)
+// Rayons affichés dans la barre de catégories (ordre d'affichage).
+const HEADER_RAYONS = [
+  "boucherie-halal",
+  "fruits-legumes",
+  "poissonnerie",
+  "epices-du-monde",
+  "surgeles",
+  "produits-laitiers",
+] as const;
+const headerRayons = HEADER_RAYONS.map((slug) => RAYONS[slug]).filter(Boolean);
+
+// Fallback si un rayon n'a pas d'`accent` dans site.ts. Les couleurs de la
+// charte « Nos Rayons » sont définies dans site.ts (accent / accentInk).
 const BUTTON_COLORS: Record<string, string> = {
-  "boucherie-halal": "#8B1919",     // Bordeaux
-  "fruits-legumes": "#2E8B4A",      // Vert Primeur
-  "epices-du-monde": "#A86B1E",     // Or profond
+  "boucherie-halal": "#AB1819",
+  "fruits-legumes": "#0D814C",
+  "poissonnerie": "#12808C",
+  "epices-du-monde": "#EF6730",
   "saveurs-afrique": "#A85710",     // Orange profond
   "saveurs-asie": "#A82F24",        // Rouge Asie
   "saveur-mediterranee": "#1E5A8F", // Bleu Méditerranée
   "saveurs-sud-amer": "#D97706",    // Ambre
   "balkans-turques": "#047857",     // Emeraude
   "produits-courants": "#4B5563",   // Gris
-  "surgeles": "#0284C7",            // Bleu clair
+  "surgeles": "#335FAA",
   "boulangerie": "#B45309",         // Marron doré
-  "produits-laitiers": "#2563EB",   // Bleu roi
+  "produits-laitiers": "#F2A955",
 };
 
 const TWEMOJI_IDS: Record<string, string> = {
   "boucherie-halal": "1f969",
-  "fruits-legumes": "1f349",
+  "fruits-legumes": "1f96c",
+  "poissonnerie": "1f41f",
   "epices-du-monde": "1f336",
   "saveurs-afrique": "1f30d",
   "saveurs-asie": "1f35c",
@@ -52,7 +66,7 @@ const TWEMOJI_IDS: Record<string, string> = {
   "produits-courants": "1f6d2",
   "surgeles": "2744",
   "boulangerie": "1f956",
-  "produits-laitiers": "1f95b",
+  "produits-laitiers": "1f9c0",
 };
 ---
 
@@ -112,7 +126,7 @@ const TWEMOJI_IDS: Record<string, string> = {
             <span class="bar bar-2 w-full h-[2px] bg-neutral-800 rounded transition-all duration-300"></span>
             <span class="bar bar-3 w-full h-[2px] bg-neutral-800 rounded transition-all duration-300"></span>
           </div>
-          <span class="burger-text text-[13px] font-soft font-bold">Menu</span>
+          <span class="burger-text text-[13px] font-pro font-bold">Menu</span>
         </button>
       </div>
 
@@ -153,7 +167,7 @@ const TWEMOJI_IDS: Record<string, string> = {
         </a>
         <a
           href="/magasins/toulouse-sud"
-          class="px-4 py-2 border border-vert text-vert hover:bg-vert hover:text-white rounded-full font-soft font-bold text-[13px] flex items-center gap-1.5 transition hover:-translate-y-0.5"
+          class="px-4 py-2 border border-vert text-vert hover:bg-vert hover:text-white rounded-full font-pro font-bold text-[13px] flex items-center gap-1.5 transition hover:-translate-y-0.5"
         >
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
@@ -276,14 +290,15 @@ const TWEMOJI_IDS: Record<string, string> = {
         id="header-categories-container" 
         class="overflow-x-auto whitespace-nowrap scrollbar-hide flex items-center gap-3 py-0.5 transition-all duration-300"
       >
-        {RAYONS_LIST.slice(0, 6).map((r) => {
-          const bgCol = BUTTON_COLORS[r.slug] || BUTTON_COLORS["fruits-legumes"];
+        {headerRayons.map((r) => {
+          const bgCol = r.accent || BUTTON_COLORS[r.slug] || BUTTON_COLORS["fruits-legumes"];
+          const inkCol = r.accentInk || "#FFFFFF";
           const twemojiId = TWEMOJI_IDS[r.slug];
           return (
             <a
               href={`/rayons/${r.slug}`}
-              class="group/tab inline-flex items-center gap-2 px-[22px] py-[8px] rounded-full text-[14.5px] font-soft font-bold text-white transition-all shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:-translate-y-[1px] hover:scale-[1.02] shrink-0"
-              style={`background-color: ${bgCol}; box-shadow: 0 4px 10px ${bgCol}25;`}
+              class="group/tab inline-flex items-center gap-2 px-[22px] py-[8px] rounded-full text-[14.5px] font-pro font-bold transition-all shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:-translate-y-[1px] hover:scale-[1.02] shrink-0"
+              style={`background-color: ${bgCol}; color: ${inkCol}; box-shadow: 0 4px 10px ${bgCol}25;`}
             >
               <span class="inline-flex items-center gap-2.5 whitespace-nowrap">
                 {twemojiId && (
@@ -304,7 +319,7 @@ const TWEMOJI_IDS: Record<string, string> = {
       <!-- Scrolled auxiliary links (slides/fades in on scroll on desktop) -->
       <div
         id="header-scrolled-links"
-        class="hidden items-center gap-5 text-[13.5px] font-soft font-bold text-neutral-500 font-pro shrink-0 transition-all duration-300 opacity-0 translate-x-5 pointer-events-none"
+        class="hidden items-center gap-5 text-[13.5px] font-pro font-bold text-neutral-500 font-pro shrink-0 transition-all duration-300 opacity-0 translate-x-5 pointer-events-none"
       >
         <a href="/actualites" class="hover:text-vert transition-colors">Actualités</a>
         <a href="/franchise" class="hover:text-vert transition-colors text-vert-dark font-black">Franchise</a>
@@ -325,7 +340,7 @@ const TWEMOJI_IDS: Record<string, string> = {
           <span class="w-1.5 h-1.5 rounded-full bg-vert animate-pulse"></span>
           Marché de Mo' · Supermarché
         </span>
-        <h4 class="font-soft font-bold text-[15px] mt-1 text-neutral-900 leading-tight">
+        <h4 class="font-pro font-bold text-[15px] mt-1 text-neutral-900 leading-tight">
           Le plus grand supermarché ethnique d'Occitanie
         </h4>
         <p class="text-[]-neutral-600 mt-1 leading-normal">

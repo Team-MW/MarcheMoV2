@@ -121,6 +121,7 @@ export const MAGASINS: Record<MagasinSlug, Magasin> = {
 export type RayonSlug =
   | "boucherie-halal"
   | "fruits-legumes"
+  | "poissonnerie"
   | "epices-du-monde"
   | "saveurs-afrique"
   | "saveurs-asie"
@@ -153,7 +154,12 @@ export interface Rayon {
   ordre: number;
   icone: string;
   featured: string[];
+  /** Couleur de fond du rayon (charte Nos Rayons). */
   accent?: string;
+  /** Couleur du texte posé sur `accent` (blanc ou noir selon la charte). */
+  accentInk?: string;
+  /** Variante foncée de `accent`, lisible en texte sur fond blanc. */
+  accentDark?: string;
   keywords: string[];
 }
 
@@ -183,7 +189,9 @@ export const RAYONS: Record<RayonSlug, Rayon> = {
     ordre: 1,
     icone: "meat",
     featured: ["Agneau halal", "Bœuf sur carcasse", "Charcuterie halal", "Volaille fermière"],
-    accent: "#8B1919",
+    accent: "#AB1819",
+    accentInk: "#FFFFFF",
+    accentDark: "#7F1213",
     keywords: [
       "boucherie halal Toulouse",
       "viande halal Toulouse",
@@ -213,12 +221,40 @@ export const RAYONS: Record<RayonSlug, Rayon> = {
     ordre: 2,
     icone: "leaf",
     featured: ["Plantain", "Manioc", "Igname", "Mangues"],
-    accent: "#2E8B4A",
+    accent: "#0D814C",
+    accentInk: "#FFFFFF",
+    accentDark: "#0A6239",
     keywords: [
       "fruits exotiques Toulouse",
       "légumes africains Toulouse",
       "plantain Toulouse",
       "primeur du monde Toulouse",
+    ],
+  },
+  poissonnerie: {
+    slug: "poissonnerie",
+    nom: "Poissonnerie",
+    nomCourt: "Poissonnerie",
+    eyebrow: "Arrivage de la marée",
+    tagline: "Poissons d'ici et du monde.",
+    description:
+      "Poissons entiers, filets, fruits de mer et poissons du monde, pour toutes les cuisines.",
+    longDescription:
+      "Dorade, bar, sardines, maquereaux, tilapia, capitaine, crevettes, calamars — poissons de nos côtes et poissons du monde, ainsi que poissons salés et séchés pour les recettes africaines et antillaises. Demandez conseil au comptoir.",
+    image: "/images/rayons/poissonnerie.svg",
+    imageAlt: "Rayon poissonnerie Marché de Mo' Toulouse — poissons frais et fruits de mer",
+    culturel: false,
+    ordre: 3,
+    icone: "fish",
+    featured: ["Dorade royale", "Tilapia", "Crevettes", "Poisson salé"],
+    accent: "#12808C",
+    accentInk: "#FFFFFF",
+    accentDark: "#0C5C65",
+    keywords: [
+      "poissonnerie Toulouse",
+      "poisson frais Toulouse",
+      "poisson africain Toulouse",
+      "fruits de mer Toulouse",
     ],
   },
   "epices-du-monde": {
@@ -240,10 +276,12 @@ export const RAYONS: Record<RayonSlug, Rayon> = {
       "/images/rayons/epices-du-monde/716c51-f9304.jpg",
     ],
     culturel: false,
-    ordre: 3,
+    ordre: 4,
     icone: "spice",
     featured: ["Ras el hanout", "Curcuma", "Piment berbère", "Thés du monde"],
-    accent: "#C0812B",
+    accent: "#EF6730",
+    accentInk: "#1A1A1A",
+    accentDark: "#B5441A",
     keywords: [
       "épices du monde Toulouse",
       "épices rares Toulouse",
@@ -271,7 +309,7 @@ export const RAYONS: Record<RayonSlug, Rayon> = {
     imageAlt:
       "Rayon saveurs africaines et créoles Marché de Mo' Toulouse — produits du continent africain",
     culturel: true,
-    ordre: 4,
+    ordre: 5,
     icone: "africa",
     featured: ["Gombo", "Fufu", "Sauce graine", "Bissap"],
     accent: "#C8751A",
@@ -301,7 +339,7 @@ export const RAYONS: Record<RayonSlug, Rayon> = {
     ],
     imageAlt: "Rayon saveurs d'Asie Marché de Mo' Toulouse — produits japonais, coréens, thaïlandais",
     culturel: true,
-    ordre: 5,
+    ordre: 6,
     icone: "asia",
     featured: ["Kimchi", "Sauce soja", "Nouilles udon", "Riz jasmin"],
     accent: "#C0392B",
@@ -329,7 +367,7 @@ export const RAYONS: Record<RayonSlug, Rayon> = {
       "/images/rayons/saveur-mediterranee/image-de-giorgio-trovato.jpg",
     ],
     culturel: true,
-    ordre: 6,
+    ordre: 7,
     icone: "olive",
     featured: ["Olives du Maghreb", "Huile d'olive", "Harissa", "Couscous"],
     accent: "#2A6599",
@@ -361,7 +399,7 @@ export const RAYONS: Record<RayonSlug, Rayon> = {
     imageAlt:
       "Plateau d'ingrédients latino-américains : plantain, avocat, arepa, orange, salsa et coriandre",
     culturel: true,
-    ordre: 7,
+    ordre: 8,
     icone: "tropical",
     featured: ["Arepa", "Dulce de leche", "Piment habanero", "Maté"],
     accent: "#E63946",
@@ -386,7 +424,7 @@ export const RAYONS: Record<RayonSlug, Rayon> = {
     imageAlt:
       "Rayon Balkans et Turquie Marché de Mo' Toulouse — Adana kebab, börek, fromages blancs",
     culturel: true,
-    ordre: 8,
+    ordre: 9,
     icone: "ottoman",
     featured: ["Börek", "Ayran", "Fromage blanc", "Baklava"],
     accent: "#8B2500",
@@ -410,7 +448,7 @@ export const RAYONS: Record<RayonSlug, Rayon> = {
     image: "/images/rayons/produits-courants.jpg",
     imageAlt: "Rayon produits courants discount Marché de Mo' Toulouse",
     culturel: false,
-    ordre: 9,
+    ordre: 10,
     icone: "cart",
     featured: ["Épicerie sucrée", "Épicerie salée", "Entretien", "Hygiène"],
     accent: "#6B7280",
@@ -437,10 +475,12 @@ export const RAYONS: Record<RayonSlug, Rayon> = {
       "/images/rayons/surgeles/vitrines-congelees.jpg",
     ],
     culturel: false,
-    ordre: 10,
+    ordre: 11,
     icone: "snow",
     featured: ["Samoussas", "Bricks", "Nems", "Viande halal surgelée"],
-    accent: "#2A7AB3",
+    accent: "#335FAA",
+    accentInk: "#FFFFFF",
+    accentDark: "#244680",
     keywords: [
       "surgelés ethniques Toulouse",
       "plats surgelés halal Toulouse",
@@ -458,7 +498,7 @@ export const RAYONS: Record<RayonSlug, Rayon> = {
     image: "/images/rayons/boulangerie.jpg",
     imageAlt: "Rayon boulangerie Marché de Mo' Toulouse — baguettes et pains chauds",
     culturel: false,
-    ordre: 11,
+    ordre: 12,
     icone: "bread",
     featured: ["Pain traditionnel", "Msemmen", "Batbout", "Viennoiseries"],
     heroSlideshow: [
@@ -471,7 +511,7 @@ export const RAYONS: Record<RayonSlug, Rayon> = {
   "produits-laitiers": {
     slug: "produits-laitiers",
     nom: "Produits Laitiers",
-    nomCourt: "Laitages",
+    nomCourt: "Crémerie",
     eyebrow: "Fraîcheur & douceur",
     tagline: "Les essentiels au rayon frais.",
     description: "Sélection complète de yaourts, laits, beurres, crèmes et fromages traditionnels de tous horizons.",
@@ -479,14 +519,16 @@ export const RAYONS: Record<RayonSlug, Rayon> = {
     image: "/images/rayons/produits-laitiers.jpg",
     imageAlt: "Rayon produits laitiers Marché de Mo' — laits, fromages et yaourts",
     culturel: false,
-    ordre: 12,
+    ordre: 13,
     icone: "cheese",
     featured: ["Lait frais", "Yaourt nature", "Fromage de brebis", "Beurre traditionnel"],
     heroSlideshow: [
       "/images/rayons/produits-laitiers.jpg",
       "/images/rayons/produits-laitiers/fromages.jpg",
     ],
-    accent: "#4A90E2",
+    accent: "#F2A955",
+    accentInk: "#1A1A1A",
+    accentDark: "#8A5A16",
     keywords: ["produits laitiers Toulouse", "fromage brebis Toulouse", "yaourt frais Toulouse"]
   },
 };

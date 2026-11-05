@@ -1,0 +1,24 @@
+/* Couleurs charte « Nos Rayons ». DA Crémerie — jaune beurre, douceur. */
+
+[data-rayon="produits-laitiers"] {
+  --rayon-accent:       #F2A955;
+  --rayon-on-accent:    #1A1A1A;
+  --rayon-accent-dark:  #8A5A16;
+  --rayon-accent-2:     #FFF1DC;
+  --rayon-accent-3:     #FFF8EE;
+  --rayon-fond-section: #FFF9F1;
+  --rayon-fond-hero:    #FFFFFF;
+  --rayon-texte-hero:   #0F0F0F;
+}
+
+[data-rayon="produits-laitiers"] .rayon-hero {
+  background:
+    radial-gradient(circle at 85% 15%, rgba(242, 169, 85, 0.14), transparent 55%),
+    linear-gradient(180deg, #FFFFFF 0%, #FFF9F1 100%);
+}
+
+[data-rayon="produits-laitiers"] .rayon-motif {
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(242, 169, 85, 0.12) 2px, transparent 2.5px);
+  background-size: 30px 30px;
+}
